@@ -12,16 +12,16 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * Servlet implementation class DeleteTopicServlet
+ * Servlet implementation class UpdateTopicSciValidServlet
  */
-@WebServlet("/DeleteDefenseServlet")
-public class DeleteDefenseServlet extends HttpServlet {
+@WebServlet("/UpdateTopicSciValidServlet")
+public class UpdateTopicSciValidServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DeleteDefenseServlet() {
+    public UpdateTopicSciValidServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,23 +36,24 @@ public class DeleteDefenseServlet extends HttpServlet {
         if (session != null && session.getAttribute("user") != null) {
             Person user = (Person) session.getAttribute("user");
             String role = user.getRole();
-            if (role.equals("Admin") || role.equals("Assistant") || role.equals("Professor")) {
-                int defenseId = Integer.parseInt(request.getParameter("defenseId"));
-
+            if (role.equals("Admin") || role.equals("Professor")) {
+                boolean valid = Boolean.parseBoolean(request.getParameter("valid"));
+                int topicId = Integer.parseInt(request.getParameter("topicId"));
                 try (Connection con = DbUtils.getInstance().getConnection()) {
                     if (con == null) {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     }
-                    String query = "DELETE FROM defense WHERE id = ?";
+
+                    // update user valid, set isolation level SERIALIZABLE
+                    String query = "UPDATE internship SET scientific_validated = ? WHERE id = ?";
                     try (PreparedStatement ps = con.prepareStatement(query)) {
-                        ps.setInt(1, defenseId);
+                        ps.setBoolean(1, valid);
+                        ps.setInt(2, topicId);
                         ps.executeUpdate();
                     }
 
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    // db error
-                    response.sendError(HttpServletResponse.SC_FORBIDDEN);
                 }
 
                 response.setStatus(200);
@@ -73,4 +74,5 @@ public class DeleteDefenseServlet extends HttpServlet {
         // TODO Auto-generated method stub
         doGet(request, response);
     }
+
 }

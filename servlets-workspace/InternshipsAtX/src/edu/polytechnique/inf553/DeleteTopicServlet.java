@@ -9,19 +9,22 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Servlet implementation class DeleteTopicServlet
  */
-@WebServlet("/DeleteDefenseServlet")
-public class DeleteDefenseServlet extends HttpServlet {
+@WebServlet("/DeleteTopicServlet")
+public class DeleteTopicServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DeleteDefenseServlet() {
+    public DeleteTopicServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,17 +40,24 @@ public class DeleteDefenseServlet extends HttpServlet {
             Person user = (Person) session.getAttribute("user");
             String role = user.getRole();
             if (role.equals("Admin") || role.equals("Assistant") || role.equals("Professor")) {
-                int defenseId = Integer.parseInt(request.getParameter("defenseId"));
-
+                int topicId = Integer.parseInt(request.getParameter("topicId"));
+                if (checkIsTaken(topicId)) {
+                    session.setAttribute("description", "Cannot delete topic if it is already assigned to a student!");
+                    session.setAttribute("method", "doGet method of DeleteTopicServlet");
+                    session.setAttribute("userId", String.valueOf(user.getId()));
+                    request.getRequestDispatcher("/ErrorPageServlet").forward(request, response);
+                    //response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                }
                 try (Connection con = DbUtils.getInstance().getConnection()) {
                     if (con == null) {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     }
-                    String query = "DELETE FROM defense WHERE id = ?";
+                    String query = "DELETE FROM internship WHERE id = ?";
                     try (PreparedStatement ps = con.prepareStatement(query)) {
-                        ps.setInt(1, defenseId);
+                        ps.setInt(1, topicId);
                         ps.executeUpdate();
                     }
+
 
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -73,4 +83,31 @@ public class DeleteDefenseServlet extends HttpServlet {
         // TODO Auto-generated method stub
         doGet(request, response);
     }
+
+    private boolean checkIsTaken(int topicId) {
+        boolean taken = true;
+        try (Connection con = DbUtils.getInstance().getConnection()) {
+            if (con == null) {
+                return false;
+            }
+
+            // get all topic list
+            String query = "SELECT is_taken "
+                    + "FROM internship "
+                    + "WHERE id=?;";
+            try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+                preparedStatement.setInt(1, topicId);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        taken = resultSet.getBoolean("is_taken");
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return taken;
+    }
+
 }

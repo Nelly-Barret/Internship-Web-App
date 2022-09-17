@@ -7,21 +7,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-import java.util.Objects;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * Servlet implementation class UpdateUserInfo
  */
-@WebServlet("/UpdateDefenseServlet")
-public class UpdateDefenseServlet extends HttpServlet {
+@WebServlet("/SearchTopicServlet")
+public class SearchTopicServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    public UpdateDefenseServlet() {
+    public SearchTopicServlet() {
         super();
         try {
             Class.forName("org.postgresql.Driver");
@@ -34,42 +31,20 @@ public class UpdateDefenseServlet extends HttpServlet {
         System.out.println(this.getClass().getName() + " doGet method called with path " + request.getRequestURI() + " and parameters " + request.getQueryString());
         // session management
         HttpSession session = request.getSession(false);
-        System.out.println(session);
         if (session != null && session.getAttribute("user") != null) {
             Person user = (Person) session.getAttribute("user");
             String role = user.getRole();
             if (role.equals("Admin")) {
-                int defenseId = Integer.parseInt(request.getParameter("defenseId"));
-                LocalTime defenseTime = null;
-                LocalDate defenseDate = null;
-                if (!Objects.equals(request.getParameter("defenseDate"), "NULL")) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH); // TODO: set it to the current locale
-                    defenseDate = LocalDate.parse(request.getParameter("defenseDate"), formatter);
-                }
-                if (!Objects.equals(request.getParameter("defenseTime"), "NULL")) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.ENGLISH); // TODO: set it to the current locale
-                    defenseTime = LocalTime.parse(request.getParameter("defenseTime"), formatter);
-                }
-
+                String keywords = request.getParameter("keywords");
                 try (Connection con = DbUtils.getInstance().getConnection()) {
                     if (con == null) {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     }
 
                     // update user role, set isolation level SERIALIZABLE
-                    String query = "UPDATE defense SET date = ?, time = ? WHERE id = ?";
+                    String query = "UPDATE person_roles SET role_id = ? WHERE person_id = ?";
                     try (PreparedStatement ps = con.prepareStatement(query)) {
-                        if (defenseDate == null) {
-                            ps.setNull(1, Types.DATE);
-                        } else {
-                            ps.setDate(1, Date.valueOf(defenseDate));
-                        }
-                        if (defenseTime == null) {
-                            ps.setNull(2, Types.TIME);
-                        } else {
-                            ps.setTime(2, Time.valueOf(defenseTime));
-                        }
-                        ps.setInt(3, defenseId);
+                        ps.setString(1, keywords);
                         ps.executeUpdate();
                     }
                 } catch (SQLException e) {

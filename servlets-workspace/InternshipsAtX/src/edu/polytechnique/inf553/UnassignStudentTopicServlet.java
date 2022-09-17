@@ -12,16 +12,16 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * Servlet implementation class DeleteTopicServlet
+ * Servlet implementation class UnassignStudentTopicServlet
  */
-@WebServlet("/DeleteDefenseServlet")
-public class DeleteDefenseServlet extends HttpServlet {
+@WebServlet("/UnassignStudentTopicServlet")
+public class UnassignStudentTopicServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DeleteDefenseServlet() {
+    public UnassignStudentTopicServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,23 +36,30 @@ public class DeleteDefenseServlet extends HttpServlet {
         if (session != null && session.getAttribute("user") != null) {
             Person user = (Person) session.getAttribute("user");
             String role = user.getRole();
-            if (role.equals("Admin") || role.equals("Assistant") || role.equals("Professor")) {
-                int defenseId = Integer.parseInt(request.getParameter("defenseId"));
-
+            if (role.equals("Admin") || role.equals("Professor")) {
+                int studentId = Integer.parseInt(request.getParameter("studentId"));
+                int topicId = Integer.parseInt(request.getParameter("topicId"));
                 try (Connection con = DbUtils.getInstance().getConnection()) {
                     if (con == null) {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     }
-                    String query = "DELETE FROM defense WHERE id = ?";
-                    try (PreparedStatement ps = con.prepareStatement(query)) {
-                        ps.setInt(1, defenseId);
-                        ps.executeUpdate();
+
+                    // update user valid, set isolation level SERIALIZABLE
+                    String query = "DELETE FROM person_internship WHERE internship_id=? AND person_id=?";
+                    try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+                        preparedStatement.setInt(1, topicId);
+                        preparedStatement.setInt(2, studentId);
+                        preparedStatement.executeUpdate();
+                    }
+
+                    query = "UPDATE internship SET is_taken = FALSE WHERE id=?";
+                    try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+                        preparedStatement.setInt(1, topicId);
+                        preparedStatement.executeUpdate();
                     }
 
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    // db error
-                    response.sendError(HttpServletResponse.SC_FORBIDDEN);
                 }
 
                 response.setStatus(200);
@@ -73,4 +80,5 @@ public class DeleteDefenseServlet extends HttpServlet {
         // TODO Auto-generated method stub
         doGet(request, response);
     }
+
 }

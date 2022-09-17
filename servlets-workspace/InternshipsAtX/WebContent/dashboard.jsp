@@ -22,7 +22,7 @@
 				</form>
 
 				${ (user.role == "Student") ? '
-				<form class="login100-form validate-form p-l-55 p-r-55" method="get" action="student-view">	
+				<form class="login100-form validate-form p-l-55 p-r-55" method="get" action="student-view">
 					<div class="container-login100-form-btn p-t-50 p-b-25">
 						<button type="submit" class="login100-form-btn">
 							My internship
@@ -32,7 +32,7 @@
 				' : '' }
 
 				${ (user.role == "Admin") ? '
-				<form class="login100-form validate-form p-l-55 p-r-55" method="get" action="user-management">	
+				<form class="login100-form validate-form p-l-55 p-r-55" method="get" action="user-management">
 					<div class="container-login100-form-btn p-t-50 p-b-25">
 						<button type="submit" class="login100-form-btn">
 							User management
@@ -42,7 +42,7 @@
 				' : '' }
 
 				${ (user.role == "Admin" || user.role == "Professor" || user.role == "Assistant") ? '
-				<form class="login100-form validate-form p-l-55 p-r-55" method="get" action="student-management">	
+				<form class="login100-form validate-form p-l-55 p-r-55" method="get" action="student-management">
 					<div class="container-login100-form-btn p-t-50 p-b-25">
 						<button type="submit" class="login100-form-btn">
 							Student management
@@ -52,7 +52,7 @@
 				' : '' }
 				
 				${ (user.role == "Admin" || user.role == "Professor") ? '
-				<form class="login100-form validate-form p-l-55 p-r-55" method="get" action="program-management">	
+				<form class="login100-form validate-form p-l-55 p-r-55" method="get" action="program-management">
 					<div class="container-login100-form-btn p-t-25 p-b-25">
 						<button type="submit" class="login100-form-btn">
 							Program management
@@ -62,17 +62,17 @@
 				' : '' }
 
 				${ (user.role == "Admin" || user.role == "Professor" || user.role == "Assistant") ? '
-				<form class="login100-form validate-form p-l-55 p-r-55" method="get" action="subject-management">	
+				<form class="login100-form validate-form p-l-55 p-r-55" method="get" action="topic-management">
 					<div class="container-login100-form-btn p-t-25 p-b-25">
 						<button type="submit" class="login100-form-btn">
-							Subject management	
+							Topic management
 						</button>
 					</div>			
 				</form>
 				' : '' }
 
 				${ (user.role == "Admin" || user.role == "Professor" || user.role == "Assistant") ? '
-				<form class="login100-form validate-form p-l-55 p-r-55" method="get" action="defense-management">	
+				<form class="login100-form validate-form p-l-55 p-r-55" method="get" action="defense-management">
 					<div class="container-login100-form-btn p-t-25 p-b-25">
 						<button type="submit" class="login100-form-btn">
 							Defense management	
