@@ -48,6 +48,7 @@ public class DefenseManagementServlet extends HttpServlet {
                 List<Person> professors = getProfessors(orderByColumn, orderBySort);
                 List<Person> students = getStudents(orderByColumn, orderBySort);
                 request.setAttribute("defenses", defenses);
+                System.out.println(defenses);
                 request.setAttribute("professors", professors);
                 request.setAttribute("students", students);
                 request.getRequestDispatcher("defense_management.jsp").forward(request, response);
@@ -119,6 +120,7 @@ public class DefenseManagementServlet extends HttpServlet {
                         Person jury2 = new Person(resultSet.getString(10), resultSet.getInt(9), resultSet.getString(11), resultSet.getBoolean(12), resultSet.getString(13));
                         Person student = new Person(resultSet.getString(15), resultSet.getInt(14), resultSet.getString(16), resultSet.getBoolean(17), resultSet.getString(18));
                         Defense defense = new Defense(resultSet.getInt(1), resultSet.getDate(2), resultSet.getTime(3), referent, jury2, student);
+                        System.out.println(defense);
                         defenses.add(defense);
                     }
                 }
