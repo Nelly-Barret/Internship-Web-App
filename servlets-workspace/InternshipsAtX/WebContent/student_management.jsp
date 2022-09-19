@@ -85,29 +85,40 @@ input:checked + .slider:before {
 <body>
 	<!-- navigation bar -->
 	<jsp:include page="header.jsp"></jsp:include>
-	
+
 	<div class="limiter">
 		<div class="container-login100 background_style">
 			<div class="wrap-login100-V2">
-				<div class="login100-form validate-form p-l-55 p-r-55 p-t-178">
+				<form class="login100-form validate-form p-l-55 p-r-55 p-t-178">
 					<span class="login100-form-title">
-						<h1> Student list by program </h1>
+						<h1> Topic Management </h1>
 					</span>
-			
-					<div>
-						<ul class=ul-simple>
-							<c:forEach items="${programs}" var="program">
-								<li class="li-simple">${program.name} - ${program.year}
-								<ul class=ul-simple>
-								<c:forEach items="${program.getStudents()}" var="student">
-									<li class=li-simple>${student.name}</li>
-								</c:forEach>
+
+					<c:forEach items="${programs}" var="program">
+						<h2 class="login100-form-btn-V2 p-l-5 p-r-5 d-inline-flex ml-3" style="width:100%; margin-top: 3rem; margin-bottom: 1rem;"> ${program.name} - ${program.year} </h2>
+						<div class="text-center">
+							<ul class="responsive-table">
+								<li class="table-header">
+									<div class="col col-1">Id
+										<a href="./topic-management?orderByColumn=id&orderBySort=ASC"><i class="fas fa-sort-numeric-down" title="sort by increasing order"></i></a>
+										<a href="./topic-management?orderByColumn=id&orderBySort=DESC"><i class="fas fa-sort-numeric-down-alt" title="sort by decreasing order"></i></a>
+									</div>
+									<div class="col col-11">Name
+										<a href="./topic-management?orderByColumn=title&orderBySort=ASC"><i class="fas fa-sort-alpha-down" title="sort by increasing order"></i></a>
+										<a href="./topic-management?orderByColumn=title&orderBySort=DESC"><i class="fas fa-sort-alpha-down-alt" title="sort by decreasing order"></i></a>
+									</div>
 								</li>
-								</ul>
-							</c:forEach>
-						</ul>
-					</div>
-				</div>
+
+								<c:forEach items="${program.getStudents()}" var="student">
+									<li class="table-row">
+										<div class="col col-1" data-label="Id">${student.id}</div>
+										<div class="col col-11" data-label="Title">${student.name}</div>
+									</li>
+								</c:forEach>
+							</ul>
+						</div>
+					</c:forEach>
+				</form>
 			</div>
 		</div>
 	</div>
