@@ -21,7 +21,7 @@ public class DbUtils {
 
     private static List<Connection>availableConnections = new ArrayList<>();
     private static List<Connection>usedConnections = new ArrayList<>();
-    private static final int MAX_CONNECTIONS = 5;
+    private static final int MAX_CONNECTIONS = 1000;
 
     private static DbUtils db = null;
 

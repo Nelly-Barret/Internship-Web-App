@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Servlet implementation class DeleteTopicServlet
+ * Servlet implementation class DeleteUserServlet
  */
 @WebServlet("/DeleteTopicServlet")
 public class DeleteTopicServlet extends HttpServlet {
@@ -43,7 +43,7 @@ public class DeleteTopicServlet extends HttpServlet {
                 int topicId = Integer.parseInt(request.getParameter("topicId"));
                 if (checkIsTaken(topicId)) {
                     session.setAttribute("description", "Cannot delete topic if it is already assigned to a student!");
-                    session.setAttribute("method", "doGet method of DeleteTopicServlet");
+                    session.setAttribute("method", "doGet method of DeleteUserServlet");
                     session.setAttribute("userId", String.valueOf(user.getId()));
                     request.getRequestDispatcher("/ErrorPageServlet").forward(request, response);
                     //response.sendError(HttpServletResponse.SC_FORBIDDEN);

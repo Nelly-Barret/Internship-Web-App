@@ -9,19 +9,22 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Servlet implementation class DeleteUserServlet
  */
-@WebServlet("/DeleteDefenseServlet")
-public class DeleteDefenseServlet extends HttpServlet {
+@WebServlet("/DeleteUserServlet")
+public class DeleteUserServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DeleteDefenseServlet() {
+    public DeleteUserServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,18 +40,22 @@ public class DeleteDefenseServlet extends HttpServlet {
             Person user = (Person) session.getAttribute("user");
             String role = user.getRole();
             if (role.equals("Admin") || role.equals("Assistant") || role.equals("Professor")) {
-                int defenseId = Integer.parseInt(request.getParameter("defenseId"));
-
+                int userId = Integer.parseInt(request.getParameter("userId"));
+                if (isStillActive(userId)) {
+                    session.setAttribute("description", "Cannot delete user if it has a topic or program assigned.");
+                    session.setAttribute("method", "doGet method of DeleteUserServlet");
+                    session.setAttribute("userId", String.valueOf(user.getId()));
+                    request.getRequestDispatcher("/ErrorPageServlet").forward(request, response);
+                }
                 try (Connection con = DbUtils.getInstance().getConnection()) {
                     if (con == null) {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     }
-                    String query = "DELETE FROM defense WHERE id = ?";
+                    String query = "DELETE FROM person WHERE id = ?";
                     try (PreparedStatement ps = con.prepareStatement(query)) {
-                        ps.setInt(1, defenseId);
+                        ps.setInt(1, userId);
                         ps.executeUpdate();
                     }
-
                 } catch (SQLException e) {
                     e.printStackTrace();
                     // db error
@@ -73,4 +80,32 @@ public class DeleteDefenseServlet extends HttpServlet {
         // TODO Auto-generated method stub
         doGet(request, response);
     }
+
+    private boolean isStillActive(int userId) {
+        boolean stillActive = true;
+        ArrayList<Integer> inactivePersons = new ArrayList<>();
+        try (Connection con = DbUtils.getInstance().getConnection()) {
+            if (con == null) {
+                return false;
+            }
+
+            // get all inactive persons
+            String query = "SELECT id FROM person WHERE " +
+                    "id NOT IN (SELECT DISTINCT person_id FROM person_internship) " +
+                    "AND id NOT IN (SELECT DISTINCT person_id FROM person_program);";
+            try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+                preparedStatement.setInt(1, userId);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        inactivePersons.add(resultSet.getInt(1));
+                    }
+                    stillActive = !inactivePersons.contains(userId);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return stillActive;
+    }
+
 }
