@@ -51,36 +51,33 @@
 								<div class="col col-3" data-label="Topic Title"><%=topic.getTitle() %></div>
 								<div class="col col-2" data-label="Supervisor Name" title="<%=topic.getSupervisorEmail()%>"><%=topic.getSupervisorName() %></div>
 								<div class="col col-1" data-label="Topic">
-									<button type="button" class="btn btn-secondary btn-sm"><a href="/download-topic?internshipId=<%=topic.getId() %>" target="_blank"><i class="fas fa-download" style="color: white"></i></a></button>
+									<button type="button" class="btn btn-secondary btn-sm"><a href="/download-topic?internshipId=<%=user.getId() %>" target="_blank"><i class="fas fa-download" style="color: white"></i></a></button>
 								</div>
 								<div class="col col-1" data-label="Fiche de stage">
 									<form method="post" action="upload-fiche" enctype="multipart/form-data">
-										<input name="topicId" value="<%=topic.getId()%>" hidden />
-										<input name="userId" value="<%=user.getId()%>" hidden />
+										<input name="studentId" value="<%=user.getId()%>" hidden />
 										<input id="fiche" type="file" name="fiche" accept="application/pdf" title="Please upload your fiche de stage in PDF format." onchange="this.form.submit()"/> <!-- onchange to avoid submit button -->
 									</form>
 									<div class="col col-1" data-label="Fiche">
-										<button type="button" class="btn btn-secondary btn-sm"><a href="/download-fiche?internshipId=<%=topic.getId() %>" target="_blank"><i class="fas fa-download" style="color: white"></i></a></button>
+										<button type="button" class="btn btn-secondary btn-sm"><a href="/download-fiche?studentId=<%=user.getId() %>" target="_blank"><i class="fas fa-download" style="color: white"></i></a></button>
 									</div>
 								</div>
 								<div class="col col-1" data-label="Report">
 									<form method="post" action="upload-report" enctype="multipart/form-data">
-										<input name="topicId" value="<%=topic.getId()%>" hidden />
-										<input name="userId" value="<%=user.getId()%>" hidden />
+										<input name="studentId" value="<%=user.getId()%>" hidden />
 										<input id="report" type="file" name="report" accept="application/pdf" title="Please upload your report in PDF format." onchange="this.form.submit()"/>
 									</form>
 									<div class="col col-1" data-label="Report">
-										<button type="button" class="btn btn-secondary btn-sm"><a href="/download-report?internshipId=<%=topic.getId() %>" target="_blank"><i class="fas fa-download" style="color: white"></i></a></button>
+										<button type="button" class="btn btn-secondary btn-sm"><a href="/download-report?studentId=<%=user.getId() %>" target="_blank"><i class="fas fa-download" style="color: white"></i></a></button>
 									</div>
 								</div>
 								<div class="col col-1" data-label="Slides">
 									<form method="post" action="upload-slides" enctype="multipart/form-data">
-										<input name="topicId" value="<%=topic.getId()%>" hidden />
-										<input name="userId" value="<%=user.getId()%>" hidden />
+										<input name="studentId" value="<%=user.getId()%>" hidden />
 										<input id="slides" type="file" name="slides" accept="application/pdf" title="Please upload your slides in PDF format." onchange="this.form.submit()"/>
 									</form>
 									<div class="col col-1" data-label="Slides">
-										<button type="button" class="btn btn-secondary btn-sm"><a href="/download-slides?internshipId=<%=topic.getId() %>" target="_blank"><i class="fas fa-download" style="color: white"></i></a></button>
+										<button type="button" class="btn btn-secondary btn-sm"><a href="/download-slides?studentId=<%=user.getId() %>" target="_blank"><i class="fas fa-download" style="color: white"></i></a></button>
 									</div>
 								</div>
 								<div class="col col-1" data-label="Confidential topic">

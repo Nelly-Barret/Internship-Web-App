@@ -1,6 +1,6 @@
 package edu.polytechnique.inf553;
 
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +14,9 @@ public class Topic {
     private boolean adminValid;
     private boolean sciValid;
     private List<Category> categories;
-    private Person affiliatedStudent;
+//    private Person affiliatedStudent;
+    private ArrayList<Person> affiliatedStudents;
     private boolean isConfidentialInternship;
-    private Timestamp dateFiche;
-    private Timestamp dateReport;
-    private Timestamp dateSlides;
 
     public Topic(String title, int id, String supervisorEmail, String supervisorName, int programId, boolean adminValid, boolean sciValid, boolean isConfidentialInternship) {
         this.title = title;
@@ -29,7 +27,7 @@ public class Topic {
         this.sciValid = sciValid;
         this.programId = programId;
         this.categories = new ArrayList<>();
-        this.affiliatedStudent = null;
+        this.affiliatedStudents = null;
         this.isConfidentialInternship = isConfidentialInternship;
     }
 
@@ -40,7 +38,7 @@ public class Topic {
         this.sciValid = sciValid;
         this.programId = programId;
         this.categories = new ArrayList<>();
-        this.affiliatedStudent = null;
+        this.affiliatedStudents = null;
         this.isConfidentialInternship = isConfidentialInternship;
     }
 
@@ -50,7 +48,7 @@ public class Topic {
         this.supervisorEmail = supervisorEmail;
         this.supervisorName = supervisorName;
         this.categories = new ArrayList<>();
-        this.affiliatedStudent = null;
+        this.affiliatedStudents = null;
         this.isConfidentialInternship = isConfidentialInternship;
     }
 
@@ -82,37 +80,24 @@ public class Topic {
         return sciValid;
     }
 
-    public Person getAffiliatedStudent() {
-        return this.affiliatedStudent;
+    public ArrayList<Person> getAffiliatedStudents() {
+        return affiliatedStudents;
     }
 
-    public void setAffiliatedStudent(Person affiliatedStudent) {
-        this.affiliatedStudent = affiliatedStudent;
+    public void addAffiliatedStudent(Person affiliatedStudent) {
+        if(this.affiliatedStudents == null) {
+            this.affiliatedStudents = new ArrayList<>();
+        }
+        this.affiliatedStudents.add(affiliatedStudent);
     }
 
-    public Timestamp getDateFiche() {
-        return this.dateFiche;
-    }
+    //    public Person getAffiliatedStudent() {
+//        return this.affiliatedStudent;
+//    }
 
-    public void setDateFiche(Timestamp dateFiche) {
-        this.dateFiche = dateFiche;
-    }
-
-    public Timestamp getDateReport() {
-        return this.dateReport;
-    }
-
-    public void setDateReport(Timestamp dateReport) {
-        this.dateReport = dateReport;
-    }
-
-    public Timestamp getDateSlides() {
-        return this.dateSlides;
-    }
-
-    public void setDateSlides(Timestamp dateSlides) {
-        this.dateSlides = dateSlides;
-    }
+//    public void setAffiliatedStudent(Person affiliatedStudent) {
+//        this.affiliatedStudent = affiliatedStudent;
+//    }
 
     public boolean isConfidentialInternship() {
         return this.isConfidentialInternship;
@@ -128,6 +113,6 @@ public class Topic {
 
     @Override
     public String toString() {
-        return "Topic{" + "id=" + id + ", title='" + title + '\'' + ", dateFiche=" + dateFiche + ", dateReport=" + dateReport + ", dateSlides=" + dateSlides + '}';
+        return "Topic{" + "id=" + id + ", title='" + title + '\'' + '}';
     }
 }

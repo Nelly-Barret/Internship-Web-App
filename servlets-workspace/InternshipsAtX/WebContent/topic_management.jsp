@@ -171,28 +171,28 @@ input:checked + .slider:before {
 										</label>
 									</div>
 									<div class="col col-2" data-label="AttributedTo">
-										<c:choose>
-											<c:when test="${topic.affiliatedStudent != null}"> <!-- if there is an affiliated student, display it -->
-												${topic.affiliatedStudent.name}
+										<c:if test="${topic.affiliatedStudents != null}"> <!-- there is at least one affiliated student -->
+											<c:forEach items="${topic.affiliatedStudents}" var="affiliatedStudent">
+												${affiliatedStudent.name}
 												<br>
-												<button type="button" class="btn btn-secondary btn-sm" onclick="unassignStudentToAffiliation(${topic.id},${topic.affiliatedStudent.id})"><i class="fas fa-trash" style="color: white"></i></button>
-												<button type="button" class="btn btn-secondary btn-sm" onclick="displayEmail('${topic.affiliatedStudent.email}')"><i class="fas fa-at" style="color: white"></i></button>
-											</c:when>
-											<c:otherwise> <!-- else display the list of students without internships -->
-												<select class="custom-select" id="select-aff-student-topic-${topic.id}" name="assignedStudent" ${(user.role != "Assistant") ? '' : 'disabled'} onfocus="updateOldAffiliatedStudent(this)" onchange="updateTopicAffiliatedStudent(${topic.id}, this);">
-													<option value="null" selected>No student</option>
-													<c:forEach items="${studentsNoInternship}" var="studentNoInternship">
-														<option value="${studentNoInternship.id}">${studentNoInternship.name}</option>
-													</c:forEach>
-												</select>
-											</c:otherwise>
-										</c:choose>
+												<button type="button" class="btn btn-secondary btn-sm" onclick="unassignStudentToAffiliation(${topic.id},${affiliatedStudent.id})"><i class="fas fa-trash" style="color: white"></i></button>
+												<button type="button" class="btn btn-secondary btn-sm" onclick="displayEmail('${affiliatedStudent.email}')"><i class="fas fa-at" style="color: white"></i></button>
+												<br><br>
+											</c:forEach>
+										</c:if>
+										<%--  In any other case, we can still add new students --%>
+										<select class="custom-select" id="select-aff-student-topic-${topic.id}" name="assignedStudent" ${(user.role != "Assistant") ? '' : 'disabled'} onfocus="updateOldAffiliatedStudent(this)" onchange="updateTopicAffiliatedStudent(${topic.id}, this);">
+											<option value="null" selected>No student</option>
+											<c:forEach items="${studentsNoInternship}" var="studentNoInternship">
+												<option value="${studentNoInternship.id}">${studentNoInternship.name}</option>
+											</c:forEach>
+										</select>
 									</div>
 									<div class="col col-1">
-										<button type="button" class="btn btn-primary btn-sm"><a href="./download-topic?internshipId=${topic.id}" target="_blank" style="color: white">Download topic</a></button>
-										<button type="button" class="btn btn-primary btn-sm" title="${(topic.dateFiche != null) ? topic.dateFiche : 'No file'}"><a href="./download-fiche?internshipId=${topic.id}" target="_blank" style="color: white">Download fiche de stage</a></button>
-										<button type="button" class="btn btn-primary btn-sm" title="${(topic.dateReport != null) ? topic.dateReport : 'No file'}"><a href="./download-report?internshipId=${topic.id}" target="_blank" style="color: white">Download report</a></button>
-										<button type="button" class="btn btn-primary btn-sm" title="${(topic.dateSlides != null) ? topic.dateSlides : 'No file'}"><a href="./download-slides?internshipId=${topic.id}" target="_blank" style="color: white">Download slides</a></button>
+										<button type="button" class="btn btn-primary btn-sm"><a href="./download-topic?studentId=${student.id}" target="_blank" style="color: white">Download topic</a></button>
+										<button type="button" class="btn btn-primary btn-sm" title="${(topic.dateFiche != null) ? topic.dateFiche : 'No file'}"><a href="./download-fiche?studentId=${student.id}" target="_blank" style="color: white">Download fiche de stage</a></button>
+										<button type="button" class="btn btn-primary btn-sm" title="${(topic.dateReport != null) ? topic.dateReport : 'No file'}"><a href="./download-report?studentId=${student.id}" target="_blank" style="color: white">Download report</a></button>
+										<button type="button" class="btn btn-primary btn-sm" title="${(topic.dateSlides != null) ? topic.dateSlides : 'No file'}"><a href="./download-slides?studentId=${student.id}" target="_blank" style="color: white">Download slides</a></button>
 										<button type="button" class="btn btn-danger btn-sm" onclick="deleteTopic(${topic.id}, '${topic.title}');"><i class="fas fa-trash"></i></button>
 									</div>
 								</li>

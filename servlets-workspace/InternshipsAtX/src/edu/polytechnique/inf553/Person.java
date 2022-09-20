@@ -1,5 +1,6 @@
 package edu.polytechnique.inf553;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,9 @@ public class Person {
     private boolean valid;
     private String email;
     private boolean hasInternship;
+    private Timestamp dateFiche;
+    private Timestamp dateReport;
+    private Timestamp dateSlides;
 
     public Person(String name, int id, String role, boolean valid, String email) {
         this.name = name;
@@ -85,8 +89,34 @@ public class Person {
         return this.hasInternship;
     }
 
+
+    public Timestamp getDateFiche() {
+        return this.dateFiche;
+    }
+
+    public void setDateFiche(Timestamp dateFiche) {
+        this.dateFiche = dateFiche;
+    }
+
+    public Timestamp getDateReport() {
+        return this.dateReport;
+    }
+
+    public void setDateReport(Timestamp dateReport) {
+        this.dateReport = dateReport;
+    }
+
+    public Timestamp getDateSlides() {
+        return this.dateSlides;
+    }
+
+    public void setDateSlides(Timestamp dateSlides) {
+        this.dateSlides = dateSlides;
+    }
+
+
     @Override
     public String toString() {
-        return "Person{" + "name='" + name + '\'' + ", id=" + id + ", role='" + role + '\'' + ", programs=" + programs + ", valid=" + valid + ", email='" + email + '\'' + '}';
+        return "Person{" + "name='" + name + '\'' + ", id=" + id + ", role='" + role + '\'' + ", programs=" + programs + ", valid=" + valid + ", email='" + email + '\''  + ", dateFiche=" + dateFiche + ", dateReport=" + dateReport + ", dateSlides=" + dateSlides + '}';
     }
 }

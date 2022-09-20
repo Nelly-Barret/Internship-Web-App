@@ -19,13 +19,13 @@
 
 					<form class="login100-form validate-form p-l-55 p-r-55 p-t-178">
 						<span class="login100-form-title">
-							<h1>Download slides of internship "${topicTitle}"</h1>
+							<h1>Download slides of student "${studentId}"</h1>
 						</span>
 					</form>
 					
 					<form>
 						<span class="subtitle" style="color:black;"> <h4> <br> <br> Did not work ? <br> 
-						<a class="subtitle" style="color:black;" href="download-report?internshipId=${internshipId}">Try again here</a>
+						<a class="subtitle" style="color:black;" href="download-report?userId=${studentId}">Try again here</a>
 						 </h4> <br> <br> </span>
 					</form>
 					
@@ -36,7 +36,7 @@
 
 		<script>
 		window.onload = function() {
-			base64toPDF("${encodedContent}", "${topicTitle}");
+			base64toPDF("${encodedContent}", "${studentId}");
 		}
 		
 		function base64toPDF(data, topicTitle) {

@@ -43,8 +43,7 @@ public class UploadReportServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("doPost called with parameter " + request.getQueryString());
 
-        int topicId = Integer.parseInt(request.getParameter("topicId"));
-        int userId = Integer.parseInt(request.getParameter("userId"));
+        int studentId = Integer.parseInt(request.getParameter("studentId"));
         Part file = request.getPart("report");
 
         try (Connection con = DbUtils.getInstance().getConnection()) {
@@ -53,13 +52,13 @@ public class UploadReportServlet extends HttpServlet {
             }
 
             // update the report
-            String query = "UPDATE internship SET report = ?, timestamp_report = ? WHERE id = ?;";
+            String query = "UPDATE person SET report = ?, timestamp_report = ? WHERE id = ?;";
             try (PreparedStatement ps = con.prepareStatement(query)) {
                 InputStream inputStream = file.getInputStream();
                 if (inputStream != null) {
                     ps.setBinaryStream(1, inputStream);
                     ps.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-                    ps.setInt(3, topicId);
+                    ps.setInt(3, studentId);
                     int row = ps.executeUpdate();
                     if (row <= 0) {
                         System.out.println("ERROR: File was not uploaded and saved into database");
@@ -70,9 +69,9 @@ public class UploadReportServlet extends HttpServlet {
             }
 
             // get the internship to display it in the student view
-            request.setAttribute("userTopic", CommonInterface.getTopicOfUser(userId, con));
+            request.setAttribute("userTopic", CommonInterface.getTopicOfUser(studentId, con));
             // also set the list of programs of the user as well as the categories of each program
-            List<Program> programs = CommonInterface.getProgramsOfUser(userId, con);
+            List<Program> programs = CommonInterface.getProgramsOfUser(studentId, con);
             request.setAttribute("programs", programs);
             request.setAttribute("topicsPerCategory", CommonInterface.getTopicsPerCategory(programs, con));
         } catch (SQLException e) {

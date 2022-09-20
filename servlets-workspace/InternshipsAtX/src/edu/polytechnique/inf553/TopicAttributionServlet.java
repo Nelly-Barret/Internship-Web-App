@@ -76,7 +76,7 @@ public class TopicAttributionServlet extends HttpServlet {
 
             List<Topic> topics = new ArrayList<>();
             // get all topic list
-            String query = "SELECT DISTINCT id, title, program_id, administr_validated, scientific_validated, confidential_internship, timestamp_fiche, timestamp_report, timestamp_slides "
+            String query = "SELECT DISTINCT id, title, program_id, administr_validated, scientific_validated, confidential_internship "
                     + "FROM internship "
                     + "WHERE is_taken IS FALSE AND administr_validated IS TRUE AND scientific_validated IS TRUE;";
             try (PreparedStatement preparedStatement = con.prepareStatement(query)) {

@@ -20,7 +20,13 @@ create table person(
    email varchar(128) not null,
    creation_date date not null,
    valid boolean not null,
-   password text not null check (length(password) >= 8)
+   password text not null check (length(password) >= 8),
+   fiche bytea,
+   timestamp_fiche timestamp,
+   report bytea,
+   timestamp_report timestamp,
+   slides bytea,
+   timestamp_slides timestamp,
 );
  
 create table internship(
@@ -28,12 +34,6 @@ create table internship(
    title varchar not null,
    creation_date date not null,
    content bytea not null,
-   fiche bytea,
-   timestamp_fiche timestamp,
-   report bytea,
-   timestamp_report timestamp,
-   slides bytea,
-   timestamp_slides timestamp,
    supervisor_id int, foreign key (supervisor_id) references person(id) on delete cascade,
    scientific_validated boolean not null,
    administr_validated boolean not null,

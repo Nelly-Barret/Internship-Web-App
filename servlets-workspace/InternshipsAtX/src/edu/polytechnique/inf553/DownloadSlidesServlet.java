@@ -20,7 +20,7 @@ public class DownloadSlidesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println(this.getClass().getName() + " doGet method called with path " + request.getRequestURI() + " and parameters " + request.getQueryString());
 
-        int internshipId = Integer.parseInt(request.getParameter("internshipId"));
+        int studentId = Integer.parseInt(request.getParameter("studentId"));
         String returnFileName = "file_not_found.jsp";
 
         try (Connection con = DbUtils.getInstance().getConnection()) {
@@ -29,10 +29,10 @@ public class DownloadSlidesServlet extends HttpServlet {
             }
 
             String query = "SELECT slides, title " +
-                    "FROM internship " +
-                    "WHERE internship.id = ? AND slides IS NOT NULL;";
+                    "FROM person " +
+                    "WHERE person.id = ? AND slides IS NOT NULL;";
             try (PreparedStatement ps = con.prepareStatement(query)) {
-                ps.setInt(1, internshipId);
+                ps.setInt(1, studentId);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         returnFileName = "download_complete_slides.jsp";
@@ -51,7 +51,7 @@ public class DownloadSlidesServlet extends HttpServlet {
                         inputStream.close();
                         outputStream.close();
 
-                        request.setAttribute("internshipId", internshipId);
+                        request.setAttribute("studentId", studentId);
                         request.setAttribute("topicTitle", rs.getString("title"));
                         request.setAttribute("encodedContent", encodedContent);
                     }
