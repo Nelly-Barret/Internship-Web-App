@@ -45,7 +45,7 @@ public class UploadSlidesServlet extends HttpServlet {
         int userId = Integer.parseInt(request.getParameter("userId"));
         Part file = request.getPart("slides");
 
-        try (Connection con = DbUtils.getConnection()) {
+        try (Connection con = DbUtils.getInstance().getConnection()) {
             if (con == null) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             }

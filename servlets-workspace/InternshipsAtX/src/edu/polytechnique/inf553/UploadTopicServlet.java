@@ -64,7 +64,7 @@ public class UploadTopicServlet extends HttpServlet {
             int programId = Integer.parseInt(programIdString);
             int categoryId = Integer.parseInt(categoryIdString);
             boolean confidentialTopic = Objects.equals(confidentiality, "on"); // the checkbox is checked
-            try (Connection con = DbUtils.getConnection()) {
+            try (Connection con = DbUtils.getInstance().getConnection()) {
                 int supervisorId;
 
                 if (con == null) {
@@ -165,7 +165,7 @@ public class UploadTopicServlet extends HttpServlet {
 
     private List<Program> loadData() {
         List<Program> programs = new ArrayList<>();
-        try (Connection con = DbUtils.getConnection()) {
+        try (Connection con = DbUtils.getInstance().getConnection()) {
             if (con == null) {
                 return null;
             }
@@ -236,7 +236,7 @@ public class UploadTopicServlet extends HttpServlet {
 
     private boolean checkEmail(String email) {
         boolean st = false;
-        try (Connection con = DbUtils.getConnection()) {
+        try (Connection con = DbUtils.getInstance().getConnection()) {
             if (con == null) {
                 return false;
             }
@@ -257,7 +257,7 @@ public class UploadTopicServlet extends HttpServlet {
 
     private boolean checkTitle(String topicTitle) {
         boolean st = false;
-        try (Connection con = DbUtils.getConnection()) {
+        try (Connection con = DbUtils.getInstance().getConnection()) {
             if (con == null) {
                 return false;
             }

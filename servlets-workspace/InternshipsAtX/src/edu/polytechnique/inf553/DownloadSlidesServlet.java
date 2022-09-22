@@ -23,7 +23,7 @@ public class DownloadSlidesServlet extends HttpServlet {
         int internshipId = Integer.parseInt(request.getParameter("internshipId"));
         String returnFileName = "file_not_found.jsp";
 
-        try (Connection con = DbUtils.getConnection()) {
+        try (Connection con = DbUtils.getInstance().getConnection()) {
             if (con == null) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             }

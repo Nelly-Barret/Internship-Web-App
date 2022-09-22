@@ -24,7 +24,7 @@ public class DownloadFicheServlet extends HttpServlet {
         String returnFileName = "file_not_found.jsp";
 
 
-        try (Connection con = DbUtils.getConnection()) {
+        try (Connection con = DbUtils.getInstance().getConnection()) {
             if (con == null) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             }

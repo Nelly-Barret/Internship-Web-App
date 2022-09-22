@@ -40,7 +40,7 @@ public class AssignStudentTopicServlet extends HttpServlet {
                 int studentId = Integer.parseInt(request.getParameter("studentId"));
                 int topicId = Integer.parseInt(request.getParameter("topicId"));
 
-                try (Connection con = DbUtils.getConnection()) {
+                try (Connection con = DbUtils.getInstance().getConnection()) {
                     if (con == null) {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     }

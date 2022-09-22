@@ -69,7 +69,7 @@ public class TopicAttributionServlet extends HttpServlet {
     }
 
     private List<Topic> getTopics() {
-        try (Connection con = DbUtils.getConnection()) {
+        try (Connection con = DbUtils.getInstance().getConnection()) {
             if (con == null) {
                 return null;
             }
@@ -103,7 +103,7 @@ public class TopicAttributionServlet extends HttpServlet {
 
     private List<Person> getStudents() {
         Person user = null;
-        try (Connection con = DbUtils.getConnection()) {
+        try (Connection con = DbUtils.getInstance().getConnection()) {
             if (con == null) {
                 return null;
             }

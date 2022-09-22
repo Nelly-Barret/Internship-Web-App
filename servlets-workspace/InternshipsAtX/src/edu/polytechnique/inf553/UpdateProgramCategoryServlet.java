@@ -39,7 +39,7 @@ public class UpdateProgramCategoryServlet extends HttpServlet {
                 String type = request.getParameter("type");
                 int pid = Integer.parseInt(request.getParameter("pid"));
                 int cid = Integer.parseInt(request.getParameter("cid"));
-                try (Connection con = DbUtils.getConnection()) {
+                try (Connection con = DbUtils.getInstance().getConnection()) {
                     if (con == null) {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     }

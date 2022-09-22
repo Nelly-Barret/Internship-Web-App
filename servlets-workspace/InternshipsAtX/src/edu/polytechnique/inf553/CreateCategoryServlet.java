@@ -44,7 +44,7 @@ public class CreateCategoryServlet extends HttpServlet {
             if (role.equals("Admin") || role.equals("Professor")) {
                 String name = request.getParameter("name");
 
-                try (Connection con = DbUtils.getConnection()) {
+                try (Connection con = DbUtils.getInstance().getConnection()) {
                     if (con == null) {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     }

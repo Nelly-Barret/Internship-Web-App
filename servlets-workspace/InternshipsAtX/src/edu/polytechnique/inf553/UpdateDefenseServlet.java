@@ -51,7 +51,7 @@ public class UpdateDefenseServlet extends HttpServlet {
                     defenseTime = LocalTime.parse(request.getParameter("defenseTime"), formatter);
                 }
 
-                try (Connection con = DbUtils.getConnection()) {
+                try (Connection con = DbUtils.getInstance().getConnection()) {
                     if (con == null) {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     }

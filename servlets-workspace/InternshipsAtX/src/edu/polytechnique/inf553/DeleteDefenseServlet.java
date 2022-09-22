@@ -39,7 +39,7 @@ public class DeleteDefenseServlet extends HttpServlet {
             if (role.equals("Admin") || role.equals("Assistant") || role.equals("Professor")) {
                 int defenseId = Integer.parseInt(request.getParameter("defenseId"));
 
-                try (Connection con = DbUtils.getConnection()) {
+                try (Connection con = DbUtils.getInstance().getConnection()) {
                     if (con == null) {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     }

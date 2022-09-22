@@ -50,7 +50,7 @@ public class SigninServlet extends HttpServlet {
 
         String errorMessage = checkEntries(firstName, lastName, email, confirmEmail, pass, confirmPass, role);
         if (errorMessage.equals("None")) {
-            try (Connection con = DbUtils.getConnection()) {
+            try (Connection con = DbUtils.getInstance().getConnection()) {
                 if (con == null) {
                     response.sendError(HttpServletResponse.SC_FORBIDDEN);
                 }
@@ -148,7 +148,7 @@ public class SigninServlet extends HttpServlet {
             }
             if (emailIsValid) {
                 boolean emailTaken;
-                try (Connection con = DbUtils.getConnection()) {
+                try (Connection con = DbUtils.getInstance().getConnection()) {
                     if (con == null) {
                         return "failed connection to database!";
                     }
@@ -178,7 +178,7 @@ public class SigninServlet extends HttpServlet {
     }
 
     private List<Program> getAllPrograms() {
-        try (Connection con = DbUtils.getConnection()) {
+        try (Connection con = DbUtils.getInstance().getConnection()) {
             if (con == null) {
                 return null;
             }

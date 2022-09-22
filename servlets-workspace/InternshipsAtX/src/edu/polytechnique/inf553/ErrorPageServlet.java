@@ -30,7 +30,7 @@ public class ErrorPageServlet extends HttpServlet {
             String method = (String) session.getAttribute("method");
             String decription = (String) session.getAttribute("description");
             int user = Integer.parseInt((String) session.getAttribute("userId"));
-            try (Connection con = DbUtils.getConnection()) {
+            try (Connection con = DbUtils.getInstance().getConnection()) {
                 if (con == null) {
                     response.sendError(HttpServletResponse.SC_FORBIDDEN);
                 }

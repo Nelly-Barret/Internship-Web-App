@@ -67,7 +67,7 @@ public class TopicDeletionServlet extends HttpServlet {
     }
 
     private List<Topic> getTopics() {
-        try (Connection con = DbUtils.getConnection()) {
+        try (Connection con = DbUtils.getInstance().getConnection()) {
             if (con == null) {
                 return null;
             }
