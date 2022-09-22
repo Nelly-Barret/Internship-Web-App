@@ -238,7 +238,7 @@
 								for (const category of v) {
 									var topics = categories_to_topics.get(k).get(category.key);
 									if(topics.length>0) {
-										programList.innerHTML += '<div class="category", id="'+category.key+'">';					
+										programList.innerHTML += '<div class="category" id="'+category.key+'">';
 										programList.innerHTML += '<div class="container-login100-form-btn-V3  p-t-50 p-b-25 p-r-250">'+
 										'<h2 class="login100-form-btn-V3 p-l-5 p-r-5">' + category.value + '</h2></div>';
 										// New table for each category
@@ -255,7 +255,7 @@
 											'<div class="col col-3" data-label="Supervisor Name">'+topic.supervisorName + '</div>'+
 											'<div class="col col-3" data-label="Supervisor Email">'+ topic.supervisorEmail +'</div>'+
 											'<div class="col col-1" data-label="Topic">'+downloadForm+'</div>'+
-											'<div class="col col-1" data-label="Confidential internship"><label class="switch"><input type="checkbox" disabled ${topic.isConfidentialInternship == true ? 'checked' : ''}><span class="slider round"></span></label></div>'+
+											'<div class="col col-1" data-label="Confidential internship">${topic.isConfidentialInternship == true ? '<i class="fas fa-lock" style="color: goldenrod" title="Confidential internship"></i>' : '<i class="fas fa-unlock" style="color: goldenrod" title="Non-confidential internship"></i>'}</div>'+
 											'</li>';
 										}
 										programList.innerHTML += '</ul>'; 
