@@ -188,10 +188,10 @@ input:checked + .slider:before {
 										</c:choose>
 									</div>
 									<div class="col col-1">
-										<button type="button" class="btn btn-primary btn-sm"><a href="/download-topic?internshipId=${topic.id}" target="_blank" style="color: white">Download topic</a></button>
-										<button type="button" class="btn btn-primary btn-sm" title="${(topic.dateFiche != null) ? topic.dateFiche : 'No file'}"><a href="/download-fiche?internshipId=${topic.id}" target="_blank" style="color: white">Download fiche de stage</a></button>
-										<button type="button" class="btn btn-primary btn-sm" title="${(topic.dateReport != null) ? topic.dateReport : 'No file'}"><a href="/download-report?internshipId=${topic.id}" target="_blank" style="color: white">Download report</a></button>
-										<button type="button" class="btn btn-primary btn-sm" title="${(topic.dateSlides != null) ? topic.dateSlides : 'No file'}"><a href="/download-slides?internshipId=${topic.id}" target="_blank" style="color: white">Download slides</a></button>
+										<button type="button" class="btn btn-primary btn-sm"><a href="./download-topic?internshipId=${topic.id}" target="_blank" style="color: white">Download topic</a></button>
+										<button type="button" class="btn btn-primary btn-sm" title="${(topic.dateFiche != null) ? topic.dateFiche : 'No file'}"><a href="./download-fiche?internshipId=${topic.id}" target="_blank" style="color: white">Download fiche de stage</a></button>
+										<button type="button" class="btn btn-primary btn-sm" title="${(topic.dateReport != null) ? topic.dateReport : 'No file'}"><a href="./download-report?internshipId=${topic.id}" target="_blank" style="color: white">Download report</a></button>
+										<button type="button" class="btn btn-primary btn-sm" title="${(topic.dateSlides != null) ? topic.dateSlides : 'No file'}"><a href="./download-slides?internshipId=${topic.id}" target="_blank" style="color: white">Download slides</a></button>
 										<button type="button" class="btn btn-danger btn-sm" onclick="deleteTopic(${topic.id}, '${topic.title}');"><i class="fas fa-trash"></i></button>
 									</div>
 								</li>

@@ -100,12 +100,12 @@
 						<ul class="responsive-table">
 							<li class="table-header">
 								<div class="col col-1">Id
-									<a href="/topic-management?orderByColumn=id&orderBySort=ASC"><i class="fas fa-sort-numeric-down" title="sort by increasing order"></i></a>
-									<a href="/topic-management?orderByColumn=id&orderBySort=DESC"><i class="fas fa-sort-numeric-down-alt" title="sort by decreasing order"></i></a>
+									<a href="./topic-management?orderByColumn=id&orderBySort=ASC"><i class="fas fa-sort-numeric-down" title="sort by increasing order"></i></a>
+									<a href="./topic-management?orderByColumn=id&orderBySort=DESC"><i class="fas fa-sort-numeric-down-alt" title="sort by decreasing order"></i></a>
 								</div>
 								<div class="col col-11">Name
-									<a href="/topic-management?orderByColumn=title&orderBySort=ASC"><i class="fas fa-sort-alpha-down" title="sort by increasing order"></i></a>
-									<a href="/topic-management?orderByColumn=title&orderBySort=DESC"><i class="fas fa-sort-alpha-down-alt" title="sort by decreasing order"></i></a>
+									<a href="./topic-management?orderByColumn=title&orderBySort=ASC"><i class="fas fa-sort-alpha-down" title="sort by increasing order"></i></a>
+									<a href="./topic-management?orderByColumn=title&orderBySort=DESC"><i class="fas fa-sort-alpha-down-alt" title="sort by decreasing order"></i></a>
 								</div>
 							</li>
 
