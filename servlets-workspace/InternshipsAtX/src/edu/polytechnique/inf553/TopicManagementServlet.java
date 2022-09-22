@@ -47,6 +47,7 @@ public class TopicManagementServlet extends HttpServlet {
                 String orderBySort = request.getParameter("orderBySort");
                 System.out.println("orderByColumn=" + orderByColumn + " ; orderBySort=" + orderBySort);
                 List<Topic> topics = getTopics(orderByColumn, orderBySort);
+                System.out.println(topics);
                 getCategoriesForTopics(topics);
                 getAffiliatedStudentsForTopics(topics);
                 List<Program> programs = getAllPrograms();
@@ -55,11 +56,15 @@ public class TopicManagementServlet extends HttpServlet {
                 List<Person> studentsWithoutInternship = getStudentsWithoutInternship();
 
                 request.setAttribute("students", students);
+                System.out.println("students=" + students);
                 request.setAttribute("studentsNoInternship", studentsWithoutInternship);
+                System.out.println("studentsNoInternship=" + studentsWithoutInternship);
                 request.setAttribute("programs", programs);
+                System.out.println("programs=" + programs);
                 request.setAttribute("categoriesForPrograms", categoriesForPrograms);
+                System.out.println("categoriesForPrograms=" + categoriesForPrograms);
                 request.setAttribute("topics", topics);
-                System.out.println(topics);
+                System.out.println("topics" + topics);
                 request.getRequestDispatcher("topic_management.jsp").forward(request, response);
             } else {
                 // the user is not admin or professor, redirect to the error page
@@ -82,7 +87,8 @@ public class TopicManagementServlet extends HttpServlet {
     }
 
     private List<Topic> getTopics(String orderByColumn, String orderBySort) {
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+        try {
             if (con == null) {
                 return null;
             }
@@ -121,11 +127,14 @@ public class TopicManagementServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            DbUtils.getInstance().releaseConnection(con);
         }
     }
 
     private HashMap<String, ArrayList<Category>> getAllCategories(List<Program> programs) {
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+        try {
             if (con == null) {
                 return null;
             }
@@ -151,11 +160,14 @@ public class TopicManagementServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            DbUtils.getInstance().releaseConnection(con);
         }
     }
 
     private List<Program> getAllPrograms() {
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+        try {
             if (con == null) {
                 return null;
             }
@@ -178,11 +190,14 @@ public class TopicManagementServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            DbUtils.getInstance().releaseConnection(con);
         }
     }
 
     private void getCategoriesForTopics(List<Topic> topics) {
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+        try {
             if (con == null) {
                 return;
             }
@@ -204,15 +219,16 @@ public class TopicManagementServlet extends HttpServlet {
                     }
                 }
             }
-
-
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            DbUtils.getInstance().releaseConnection(con);
         }
     }
 
     private void getAffiliatedStudentsForTopics(List<Topic> topics) {
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+        try {
             if (con == null) {
                 return;
             }
@@ -241,19 +257,20 @@ public class TopicManagementServlet extends HttpServlet {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            DbUtils.getInstance().releaseConnection(con);
         }
     }
 
     private List<Person> getStudents() {
         Person user;
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+        try {
             if (con == null) {
                 return null;
             }
             List<Person> students = new ArrayList<>();
-            String query = "select name, role, person_id, valid, email "
-                    + "from person p inner join person_roles pr on pr.person_id = p.id inner join role_type rt on rt.id = pr.role_id "
-                    + "where rt.role = 'Student' AND valid IS TRUE;";
+            String query = "select name, role, person_id, valid, email from person p inner join person_roles pr on pr.person_id = p.id inner join role_type rt on rt.id = pr.role_id where rt.role = 'Student' AND valid IS TRUE;";
 
             try (
                     PreparedStatement stmt = con.prepareStatement(query);
@@ -274,11 +291,14 @@ public class TopicManagementServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            DbUtils.getInstance().releaseConnection(con);
         }
     }
 
     private List<Person> getStudentsWithoutInternship() {
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+        try {
             if (con == null) {
                 return null;
             }
@@ -309,6 +329,8 @@ public class TopicManagementServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            DbUtils.getInstance().releaseConnection(con);
         }
     }
 }

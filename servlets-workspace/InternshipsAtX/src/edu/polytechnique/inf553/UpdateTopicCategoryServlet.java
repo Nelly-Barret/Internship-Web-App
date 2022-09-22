@@ -44,7 +44,8 @@ public class UpdateTopicCategoryServlet extends HttpServlet {
                 int topicId = Integer.parseInt(request.getParameter("topicId"));
                 int categoryId = Integer.parseInt(request.getParameter("categoryId"));
                 boolean addCategory = Boolean.parseBoolean(request.getParameter("select"));
-                try (Connection con = DbUtils.getInstance().getConnection()) {
+                Connection con = DbUtils.getInstance().getConnection();
+                try {
                     if (con == null) {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     }
@@ -67,6 +68,8 @@ public class UpdateTopicCategoryServlet extends HttpServlet {
                     e.printStackTrace();
                     // query errors
                     response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                }  finally {
+                    DbUtils.getInstance().releaseConnection(con);
                 }
 
                 response.setStatus(200);

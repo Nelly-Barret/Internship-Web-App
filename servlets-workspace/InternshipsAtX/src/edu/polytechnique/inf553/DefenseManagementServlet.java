@@ -88,7 +88,8 @@ public class DefenseManagementServlet extends HttpServlet {
     }
 
     private List<Defense> getDefenses(String orderByColumn, String orderBySort) {
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+        try {
             if (con == null) {
                 return null;
             }
@@ -127,11 +128,14 @@ public class DefenseManagementServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            DbUtils.getInstance().releaseConnection(con);
         }
     }
 
     private List<Person> getProfessors(String orderByColumn, String orderBySort) {
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+        try {
             if (con == null) {
                 return null;
             }
@@ -158,15 +162,17 @@ public class DefenseManagementServlet extends HttpServlet {
             }
 
             return professors;
-
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            DbUtils.getInstance().releaseConnection(con);
         }
     }
 
     private List<Person> getStudents(String orderByColumn, String orderBySort) {
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+        try {
             if (con == null) {
                 return null;
             }
@@ -192,10 +198,11 @@ public class DefenseManagementServlet extends HttpServlet {
             }
 
             return professors;
-
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            DbUtils.getInstance().releaseConnection(con);
         }
     }
 

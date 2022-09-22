@@ -42,7 +42,8 @@ public class DeleteCategoryServlet extends HttpServlet {
             String role = user.getRole();
             if (role.equals("Admin") || role.equals("Professor")) {
                 int id = Integer.parseInt(request.getParameter("id"));
-                try (Connection con = DbUtils.getInstance().getConnection()) {
+                Connection con = DbUtils.getInstance().getConnection();
+                try {
                     if (con == null) {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     }
@@ -57,6 +58,8 @@ public class DeleteCategoryServlet extends HttpServlet {
                     e.printStackTrace();
                     // db error
                     response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                } finally {
+                    DbUtils.getInstance().releaseConnection(con);
                 }
 
                 response.setStatus(200);

@@ -14,14 +14,14 @@ public class DbUtils {
     private static final String dbName = "internship_webapp";
     private static final String dbHost = "localhost";
     private static final String dbPort = "5432";
-    private static final String dbUser = "postgres";
-    private static final String dbPassword = "postgres";
+    private static final String dbUser = "nelly";
+    private static final String dbPassword = "";
 
     private static final String dbUrl = "jdbc:postgresql://"+dbHost+":"+dbPort+"/"+dbName;
 
     private static List<Connection>availableConnections = new ArrayList<>();
     private static List<Connection>usedConnections = new ArrayList<>();
-    private static final int MAX_CONNECTIONS = 1000;
+    private static final int MAX_CONNECTIONS = 5;
 
     private static DbUtils db = null;
 
@@ -55,7 +55,14 @@ public class DbUtils {
     public static Connection getConnection() {
         if (availableConnections.size() == 0) {
             System.out.println("All connections are Used !!");
-            return null;
+            System.out.println("taille availableConnections: " + availableConnections.size() + " -> " + availableConnections);
+            System.out.println("taille usedConnections: " + usedConnections.size() + " -> " + usedConnections);
+            if(releaseConnection(usedConnections.get(0))) {
+                System.out.println("realased ");
+                return availableConnections.get(0);
+            } else {
+                throw new IllegalStateException("no database connection.");
+            }
         } else {
             Connection con = availableConnections.remove(availableConnections.size() - 1);
             usedConnections.add(con);

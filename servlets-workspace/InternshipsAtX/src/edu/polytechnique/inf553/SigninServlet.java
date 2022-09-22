@@ -50,7 +50,8 @@ public class SigninServlet extends HttpServlet {
 
         String errorMessage = checkEntries(firstName, lastName, email, confirmEmail, pass, confirmPass, role);
         if (errorMessage.equals("None")) {
-            try (Connection con = DbUtils.getInstance().getConnection()) {
+            Connection con = DbUtils.getInstance().getConnection();
+            try {
                 if (con == null) {
                     response.sendError(HttpServletResponse.SC_FORBIDDEN);
                 }
@@ -102,6 +103,8 @@ public class SigninServlet extends HttpServlet {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                DbUtils.getInstance().releaseConnection(con);
             }
             request.setAttribute("email", email);
             request.getRequestDispatcher("signin_complete.jsp").forward(request, response);
@@ -148,7 +151,8 @@ public class SigninServlet extends HttpServlet {
             }
             if (emailIsValid) {
                 boolean emailTaken;
-                try (Connection con = DbUtils.getInstance().getConnection()) {
+                Connection con = DbUtils.getInstance().getConnection();
+                try {
                     if (con == null) {
                         return "failed connection to database!";
                     }
@@ -165,6 +169,8 @@ public class SigninServlet extends HttpServlet {
                 } catch (SQLException e) {
                     e.printStackTrace();
                     emailTaken = true;
+                } finally {
+                    DbUtils.getInstance().releaseConnection(con);
                 }
                 if (emailTaken) {
                     return "The email is already used.";
@@ -178,7 +184,8 @@ public class SigninServlet extends HttpServlet {
     }
 
     private List<Program> getAllPrograms() {
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+        try {
             if (con == null) {
                 return null;
             }
@@ -194,12 +201,12 @@ public class SigninServlet extends HttpServlet {
                     }
                 }
             }
-
             return programs;
-
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            DbUtils.getInstance().releaseConnection(con);
         }
     }
 }

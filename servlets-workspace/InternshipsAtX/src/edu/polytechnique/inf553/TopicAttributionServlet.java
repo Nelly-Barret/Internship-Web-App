@@ -69,7 +69,8 @@ public class TopicAttributionServlet extends HttpServlet {
     }
 
     private List<Topic> getTopics() {
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+        try {
             if (con == null) {
                 return null;
             }
@@ -98,12 +99,15 @@ public class TopicAttributionServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            DbUtils.getInstance().releaseConnection(con);
         }
     }
 
     private List<Person> getStudents() {
         Person user = null;
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+        try {
             if (con == null) {
                 return null;
             }
@@ -126,12 +130,12 @@ public class TopicAttributionServlet extends HttpServlet {
                     students.add(user);
                 }
             }
-
             return students;
-
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            DbUtils.getInstance().releaseConnection(con);
         }
     }
 

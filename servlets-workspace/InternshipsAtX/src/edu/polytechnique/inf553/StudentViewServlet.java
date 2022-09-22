@@ -44,7 +44,8 @@ public class StudentViewServlet extends HttpServlet {
                 int studentId = user.getId();
 
                 //======================== DATA LOADING PART ========================
-                try (Connection con = DbUtils.getInstance().getConnection()) {
+                Connection con = DbUtils.getInstance().getConnection();
+                try {
                     if (con == null) {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     }
@@ -138,6 +139,8 @@ public class StudentViewServlet extends HttpServlet {
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
+                } finally {
+                    DbUtils.getInstance().releaseConnection(con);
                 }
                 //======================== END OF DATA LOADING PART ========================
 

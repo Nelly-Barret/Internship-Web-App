@@ -33,7 +33,8 @@ public class UpdateUserValidServlet extends HttpServlet {
             if (role.equals("Admin")) {
                 boolean valid = Boolean.parseBoolean(request.getParameter("valid"));
                 int pid = Integer.parseInt(request.getParameter("pid"));
-                try (Connection con = DbUtils.getInstance().getConnection()) {
+                Connection con = DbUtils.getInstance().getConnection();
+                try {
                     if (con == null) {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     }
@@ -48,6 +49,8 @@ public class UpdateUserValidServlet extends HttpServlet {
 
                 } catch (SQLException e) {
                     e.printStackTrace();
+                } finally {
+                    DbUtils.getInstance().releaseConnection(con);
                 }
 
                 response.setStatus(200);

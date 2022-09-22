@@ -47,7 +47,8 @@ public class UploadFicheServlet extends HttpServlet {
         int userId = Integer.parseInt(request.getParameter("userId"));
         Part file = request.getPart("fiche");
 
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+                try {
             if (con == null) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
@@ -79,7 +80,9 @@ public class UploadFicheServlet extends HttpServlet {
             request.setAttribute("topicsPerCategory", CommonInterface.getTopicsPerCategory(programs, con));
         } catch (SQLException e) {
             e.printStackTrace();
-        }
+        } finally {
+                    DbUtils.getInstance().releaseConnection(con);
+                }
         request.getRequestDispatcher("student_view.jsp").forward(request, response);
     }
 }

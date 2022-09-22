@@ -40,13 +40,14 @@ public class UpdateTopicProgramServlet extends HttpServlet {
             Person user = (Person) session.getAttribute("user");
             String role = user.getRole();
             if (role.equals("Admin") || role.equals("Professor")) {
-                Connection con = null;
+//                Connection con = null;
                 int topicId = Integer.parseInt(request.getParameter("topicId"));
                 int programId = Integer.parseInt(request.getParameter("programId"));
 
                 // update the program
+                Connection con = DbUtils.getInstance().getConnection();
                 try {
-                    con = DbUtils.getInstance().getConnection();
+//                    con = DbUtils.getInstance().getConnection();
                     if (con == null) {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     }
@@ -59,8 +60,10 @@ public class UpdateTopicProgramServlet extends HttpServlet {
                     ps.executeUpdate();
                 } catch (SQLException e) {
                     e.printStackTrace();
+//                } finally {
+//                    DbUtils.getInstance().releaseConnection(con);
                 } finally {
-                    DbUtils.releaseConnection(con);
+                    DbUtils.getInstance().releaseConnection(con);
                 }
 
                 // if there are no categories in common between the program and the topic, reset the topic category
@@ -69,8 +72,8 @@ public class UpdateTopicProgramServlet extends HttpServlet {
                 Set<Integer> programCategories = getCategoriesForProgram(programId);
                 topicCategories.retainAll(programCategories);
                 if (topicCategories.isEmpty()) {
-                    try {
-                        con = DbUtils.getInstance().getConnection();
+                try {
+//                        con = DbUtils.getInstance().getConnection();
                         if (con == null) {
                             response.sendError(HttpServletResponse.SC_FORBIDDEN);
                         }
@@ -81,9 +84,11 @@ public class UpdateTopicProgramServlet extends HttpServlet {
                         ps.executeUpdate();
                     } catch (SQLException e) {
                         e.printStackTrace();
+//                    } finally {
+//                        DbUtils.getInstance().releaseConnection(con);
                     } finally {
-                        DbUtils.releaseConnection(con);
-                    }
+                    DbUtils.getInstance().releaseConnection(con);
+                }
                 }
 
                 response.setStatus(200);
@@ -106,7 +111,8 @@ public class UpdateTopicProgramServlet extends HttpServlet {
     }
 
     private Set<Integer> getCategoriesForTopic(int topicId) {
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+                try {
             if (con == null) {
                 return null;
             }
@@ -131,11 +137,14 @@ public class UpdateTopicProgramServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
-        }
+        } finally {
+                    DbUtils.getInstance().releaseConnection(con);
+                }
     }
 
     private Set<Integer> getCategoriesForProgram(int programId) {
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+                try {
             if (con == null) {
                 return null;
             }
@@ -159,7 +168,9 @@ public class UpdateTopicProgramServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
-        }
+        } finally {
+                    DbUtils.getInstance().releaseConnection(con);
+                }
     }
 
 }

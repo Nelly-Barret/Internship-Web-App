@@ -79,7 +79,8 @@ public class UpdatePersonDefenseServlet extends HttpServlet {
     }
 
     private void setReferent(int referentId, int defenseId, HttpServletResponse response) throws IOException {
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+                try {
             if (con == null) {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
@@ -98,12 +99,15 @@ public class UpdatePersonDefenseServlet extends HttpServlet {
             e.printStackTrace();
             // query errors
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
+        } finally {
+                    DbUtils.getInstance().releaseConnection(con);
+                }
         response.setStatus(200);
     }
 
     private void setStudent(int studentId, int defenseId, HttpServletResponse response) throws IOException {
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+                try {
             if (con == null) {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
@@ -122,12 +126,15 @@ public class UpdatePersonDefenseServlet extends HttpServlet {
             e.printStackTrace();
             // query errors
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
+        } finally {
+                    DbUtils.getInstance().releaseConnection(con);
+                }
         response.setStatus(200);
     }
 
     private void setJury2(int jury2Id, int defenseId, HttpServletResponse response) throws IOException {
-        try (Connection con = DbUtils.getInstance().getConnection()) {
+        Connection con = DbUtils.getInstance().getConnection();
+                try {
             if (con == null) {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
@@ -146,7 +153,9 @@ public class UpdatePersonDefenseServlet extends HttpServlet {
             e.printStackTrace();
             // query errors
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
+        } finally {
+                    DbUtils.getInstance().releaseConnection(con);
+                }
         response.setStatus(200);
     }
 
