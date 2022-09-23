@@ -39,6 +39,7 @@ public class StudentViewServlet extends HttpServlet {
             String role = user.getRole();
             if (role.equals("Student")) {
 
+                Topic userTopic = null;
                 HashMap<Integer, ArrayList<Category>> topic2category = new HashMap<>();
                 HashMap<Program, ArrayList<Topic>> topicsAvailableForTheStudentPerProgram = new HashMap<>();
                 Defense studentDefense = null;
@@ -51,65 +52,97 @@ public class StudentViewServlet extends HttpServlet {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN);
                     }
 
+                    System.out.println("1");
                     // check if the user already has an internship
                     String query = "select i.id as id, i.title as title, p.email as email, p.name as name, i.confidential_internship as confidential_internship\n" +
                             "FROM internship i\n" +
                             "INNER JOIN person p on i.supervisor_id = p.id\n" +
                             "INNER JOIN person_internship pi on i.id = pi.internship_id\n" +
                             "WHERE pi.person_id = ?";
+                    System.out.println("2");
                     try (PreparedStatement ps0 = con.prepareStatement(query)) {
                         ps0.setInt(1, studentId);
+                    System.out.println("3");
                         try (ResultSet rs0 = ps0.executeQuery()) {
                             while (rs0.next()) {
-                                Topic userTopic = new Topic(rs0.getString("title"),
-                                        rs0.getInt("id"),
-                                        rs0.getString("email"),
-                                        rs0.getString("name"),
-                                        rs0.getBoolean("confidential_internship"));
-                                request.setAttribute("userTopic", userTopic);
+                    System.out.println("4");
+                                userTopic = new Topic(rs0.getString("title"), rs0.getInt("id"), rs0.getString("email"), rs0.getString("name"), rs0.getBoolean("confidential_internship"));
                             }
                         }
                     }
+                    System.out.println("5");
 
                     // get all the internships that the user can apply to
                     // i.e. those that are validated and no taken
                     // and that are in the program(s) of the student
                     // and regardless they have a category or not
-                    query = "SELECT pr.id AS programId, pr.name AS programName, pr.year AS programYear, i.id, i.title, i.confidential_internship, p.name AS supervisorName, p.email AS supervisorEmail, c.id AS categoryId, c.description AS categoryDescr " +
-                            "FROM internship i, person p, internship_category ic, categories c, person_program pp, program pr " +
-                            "WHERE i.supervisor_id = p.id AND i.id = ic.internship_id AND ic.category_id = c.id AND i.program_id = pp.program_id AND pp.person_id = ? AND pp.program_id = pr.id " +
+                    ArrayList<Integer> topicsIds = new ArrayList<>();
+                    System.out.println("6");
+                    query = "SELECT pr.id AS programId, pr.name AS programName, pr.year AS programYear, i.id AS topicId, i.title, i.confidential_internship, p.name AS supervisorName, p.email AS supervisorEmail " +
+                            "FROM internship i, person p, person_program pp, program pr " +
+                            "WHERE i.supervisor_id = p.id AND i.program_id = pp.program_id AND pp.person_id = ? AND pp.program_id = pr.id " +
                             "   AND i.scientific_validated = true " +
                             "   AND i.administr_validated = true " +
                             "   AND is_taken = false " +
                             "ORDER BY pp.program_id, i.id;";
+                    System.out.println("7");
                     try (PreparedStatement stmt2 = con.prepareStatement(query)) {
                         stmt2.setInt(1, studentId);
+                    System.out.println("8");
                         try (ResultSet rs = stmt2.executeQuery()) {
                             while (rs.next()) {
+                    System.out.println("9");
                                 Program program = new Program(rs.getInt("programId"), rs.getString("programName"), rs.getString("programYear"));
+                    System.out.println("10");
                                 if(!topicsAvailableForTheStudentPerProgram.containsKey(program)) {
+                    System.out.println("11");
                                     topicsAvailableForTheStudentPerProgram.put(program, new ArrayList<>());
                                 }
-                                Topic topic = new Topic(rs.getString("title"), rs.getInt("id"), rs.getString("supervisorEmail"), rs.getString("supervisorName"), rs.getBoolean("confidential_internship"));
+                    System.out.println("12");
+                                Topic topic = new Topic(rs.getString("title"), rs.getInt("topicId"), rs.getString("supervisorEmail"), rs.getString("supervisorName"), rs.getBoolean("confidential_internship"));
+                    System.out.println("13");
                                 topicsAvailableForTheStudentPerProgram.get(program).add(topic);
+                    System.out.println("14");
+                                topicsIds.add(rs.getInt("topicId"));
+                    System.out.println("15");
                             }
                         }
                     }
+                    System.out.println("16");
+                    System.out.println("topicsIds = " + topicsIds);
 
                     // get categories of each topic -- store only the topic ID and its categories
-                    query = "SELECT c.id AS categoryId, c.description AS categoryDescr " +
+                    System.out.println("17");
+                    String topicsIdsString = "";
+                    System.out.println("18");
+                    for(int topicId : topicsIds) {
+                        topicsIdsString += topicId + ",";
+                    }
+                    System.out.println("19");
+                    topicsIdsString = topicsIdsString.substring(0, topicsIdsString.length() -1); // remove last comma
+                    System.out.println("20");
+                    System.out.println("topicsIdsString = " + topicsIdsString);
+                    query = "SELECT DISTINCT ic.internship_id AS topicId, c.id AS categoryId, c.description AS categoryDescr " +
                             "FROM categories c, internship_category ic " +
-                            "WHERE ic.category_id = c.id AND ic.internship_id IN (" + + ");";
+                            "WHERE ic.category_id = c.id AND ic.internship_id IN (" + topicsIdsString + ");";
+                    System.out.println("21");
+                    System.out.println("query = " + query);
                     try(PreparedStatement stmt = con.prepareStatement(query)) {
+                    System.out.println("22");
                         ResultSet rs = stmt.executeQuery();
-                        if(rs.next()) {
+                    System.out.println("23");
+                        while(rs.next()) {
                             if(!topic2category.containsKey(rs.getInt("topicId"))) {
+                    System.out.println("24");
                                 topic2category.put(rs.getInt("topicId"), new ArrayList<>());
+                    System.out.println("25");
                             }
-                            topic2category.get(rs.getInt("topicId")).add(new Category(rs.getInt("categoryId"), rs.getString("categoryDesc")));
+                            topic2category.get(rs.getInt("topicId")).add(new Category(rs.getString("categoryDescr"), rs.getInt("categoryId")));
+                    System.out.println("26");
                         }
                     }
-                    System.out.println(topic2category);
+                    System.out.println("27");
+                    System.out.println("topic2category = " + topic2category);
 
                     // get the defense of the student
                     // p1 corresponds to the referent
@@ -132,8 +165,10 @@ public class StudentViewServlet extends HttpServlet {
                 //======================== END OF DATA LOADING PART ========================
 
 
-                System.out.println("topicsAvailableForTheStudentPerProgram=" + topicsAvailableForTheStudentPerProgram);
-                System.out.println("programsAvailableForTheStudent=" + new ArrayList<>(topicsAvailableForTheStudentPerProgram.keySet()));
+                System.out.println("topicsAvailableForTheStudentPerProgram = " + topicsAvailableForTheStudentPerProgram);
+                System.out.println("programsAvailableForTheStudent = " + new ArrayList<>(topicsAvailableForTheStudentPerProgram.keySet()));
+                System.out.println("topic2category = " + topic2category);
+                request.setAttribute("userTopic", userTopic);
                 request.setAttribute("topicsAvailableForTheStudentPerProgram", topicsAvailableForTheStudentPerProgram);
                 request.setAttribute("programsAvailableForTheStudent", new ArrayList<>(topicsAvailableForTheStudentPerProgram.keySet()));
                 request.setAttribute("topic2category", topic2category);
