@@ -130,4 +130,6 @@ public class Topic {
     public String toString() {
         return "Topic{" + "id=" + id + ", title='" + title + '\'' + ", dateFiche=" + dateFiche + ", dateReport=" + dateReport + ", dateSlides=" + dateSlides + '}';
     }
+
+
 }
