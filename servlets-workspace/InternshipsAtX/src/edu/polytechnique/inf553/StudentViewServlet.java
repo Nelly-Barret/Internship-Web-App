@@ -111,38 +111,40 @@ public class StudentViewServlet extends HttpServlet {
                     System.out.println("16");
                     System.out.println("topicsIds = " + topicsIds);
 
-                    // get categories of each topic -- store only the topic ID and its categories
-                    System.out.println("17");
-                    String topicsIdsString = "";
-                    System.out.println("18");
-                    for(int topicId : topicsIds) {
-                        topicsIdsString += topicId + ",";
-                    }
-                    System.out.println("19");
-                    topicsIdsString = topicsIdsString.substring(0, topicsIdsString.length() -1); // remove last comma
-                    System.out.println("20");
-                    System.out.println("topicsIdsString = " + topicsIdsString);
-                    query = "SELECT DISTINCT ic.internship_id AS topicId, c.id AS categoryId, c.description AS categoryDescr " +
-                            "FROM categories c, internship_category ic " +
-                            "WHERE ic.category_id = c.id AND ic.internship_id IN (" + topicsIdsString + ");";
-                    System.out.println("21");
-                    System.out.println("query = " + query);
-                    try(PreparedStatement stmt = con.prepareStatement(query)) {
-                    System.out.println("22");
-                        ResultSet rs = stmt.executeQuery();
-                    System.out.println("23");
-                        while(rs.next()) {
-                            if(!topic2category.containsKey(rs.getInt("topicId"))) {
-                    System.out.println("24");
-                                topic2category.put(rs.getInt("topicId"), new ArrayList<>());
-                    System.out.println("25");
-                            }
-                            topic2category.get(rs.getInt("topicId")).add(new Category(rs.getString("categoryDescr"), rs.getInt("categoryId")));
-                    System.out.println("26");
+                    if(!topicsIds.isEmpty()) {
+                        // get categories of each topic -- store only the topic ID and its categories
+                        System.out.println("17");
+                        String topicsIdsString = "";
+                        System.out.println("18");
+                        for(int topicId : topicsIds) {
+                            topicsIdsString += topicId + ",";
                         }
+                        System.out.println("19");
+                        topicsIdsString = topicsIdsString.substring(0, topicsIdsString.length() -1); // remove last comma
+                        System.out.println("20");
+                        System.out.println("topicsIdsString = " + topicsIdsString);
+                        query = "SELECT DISTINCT ic.internship_id AS topicId, c.id AS categoryId, c.description AS categoryDescr " +
+                                "FROM categories c, internship_category ic " +
+                                "WHERE ic.category_id = c.id AND ic.internship_id IN (" + topicsIdsString + ");";
+                        System.out.println("21");
+                        System.out.println("query = " + query);
+                        try(PreparedStatement stmt = con.prepareStatement(query)) {
+                        System.out.println("22");
+                            ResultSet rs = stmt.executeQuery();
+                        System.out.println("23");
+                            while(rs.next()) {
+                                if(!topic2category.containsKey(rs.getInt("topicId"))) {
+                        System.out.println("24");
+                                    topic2category.put(rs.getInt("topicId"), new ArrayList<>());
+                        System.out.println("25");
+                                }
+                                topic2category.get(rs.getInt("topicId")).add(new Category(rs.getString("categoryDescr"), rs.getInt("categoryId")));
+                        System.out.println("26");
+                            }
+                        }
+                        System.out.println("27");
+                        System.out.println("topic2category = " + topic2category);
                     }
-                    System.out.println("27");
-                    System.out.println("topic2category = " + topic2category);
 
                     // get the defense of the student
                     // p1 corresponds to the referent
