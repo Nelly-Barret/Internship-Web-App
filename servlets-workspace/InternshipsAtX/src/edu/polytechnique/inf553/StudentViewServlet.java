@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StudentViewServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -166,11 +167,19 @@ public class StudentViewServlet extends HttpServlet {
                 }
                 //======================== END OF DATA LOADING PART ========================
 
-
+                boolean atLeastOneAvailableInternship = false;
+                for(Map.Entry<Program, ArrayList<Topic>> entry : topicsAvailableForTheStudentPerProgram.entrySet()) {
+                    if(!entry.getValue().isEmpty()) { // if at least one topic in one program, we set the boolean to true and stop
+                        atLeastOneAvailableInternship = true;
+                        break;
+                    }
+                }
+                System.out.println("atLeastOneAvailableInternship = " + atLeastOneAvailableInternship);
                 System.out.println("topicsAvailableForTheStudentPerProgram = " + topicsAvailableForTheStudentPerProgram);
                 System.out.println("programsAvailableForTheStudent = " + new ArrayList<>(topicsAvailableForTheStudentPerProgram.keySet()));
                 System.out.println("topic2category = " + topic2category);
                 request.setAttribute("userTopic", userTopic);
+                request.setAttribute("atLeastOneAvaialableTopic", atLeastOneAvailableInternship);
                 request.setAttribute("topicsAvailableForTheStudentPerProgram", topicsAvailableForTheStudentPerProgram);
                 request.setAttribute("programsAvailableForTheStudent", new ArrayList<>(topicsAvailableForTheStudentPerProgram.keySet()));
                 request.setAttribute("topic2category", topic2category);
