@@ -53,7 +53,7 @@ public class UploadFicheServlet extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
 
-            // update the slides
+            // update the fiche de stage
             String query = "UPDATE internship SET fiche = ?, timestamp_fiche = ? WHERE id = ?;";
             try (PreparedStatement ps = con.prepareStatement(query)) {
                 InputStream inputStream = file.getInputStream();

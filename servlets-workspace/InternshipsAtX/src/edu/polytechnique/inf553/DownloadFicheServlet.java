@@ -29,7 +29,7 @@ public class DownloadFicheServlet extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
 
-            String query = "SELECT fiche, title " + "FROM internship " + "WHERE internship.id = ? AND fiche IS NOT NULL;";
+            String query = "SELECT fiche, id " + "FROM internship " + "WHERE internship.id = ? AND fiche IS NOT NULL;";
             try (PreparedStatement ps = con.prepareStatement(query)) {
                 ps.setInt(1, internshipId);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -51,7 +51,7 @@ public class DownloadFicheServlet extends HttpServlet {
                         outputStream.close();
 
                         request.setAttribute("internshipId", internshipId);
-                        request.setAttribute("topicTitle", rs.getString("title"));
+                        request.setAttribute("topicId", rs.getInt("id"));
                         request.setAttribute("encodedContent", encodedContent);
                     }
                 }

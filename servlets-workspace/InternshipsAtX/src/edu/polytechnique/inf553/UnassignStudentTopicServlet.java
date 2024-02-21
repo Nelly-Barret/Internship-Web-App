@@ -36,7 +36,7 @@ public class UnassignStudentTopicServlet extends HttpServlet {
         if (session != null && session.getAttribute("user") != null) {
             Person user = (Person) session.getAttribute("user");
             String role = user.getRole();
-            if (role.equals("Admin") || role.equals("Professor")) {
+            if (role.equals("Admin") || role.equals("Professor") || role.equals("Assistant")) {
                 int studentId = Integer.parseInt(request.getParameter("studentId"));
                 int topicId = Integer.parseInt(request.getParameter("topicId"));
                 Connection con = DbUtils.getInstance().getConnection();

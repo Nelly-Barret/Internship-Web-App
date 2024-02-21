@@ -36,10 +36,10 @@
 
 		<script>
 		window.onload = function() {
-			base64toPDF("${encodedContent}", "${topicTitle}");
+			base64toPDF("${encodedContent}", "${topicId}");
 		}
 		
-		function base64toPDF(data, topicTitle) {
+		function base64toPDF(data, topicId) {
 		    var bufferArray = base64ToArrayBuffer(data);
 		    var blobStore = new Blob([bufferArray], { type: "application/pdf" });
 		    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
@@ -50,7 +50,7 @@
 		    var link = document.createElement('a');
 		    document.body.appendChild(link);
 		    link.href = data;
-		    link.download = topicTitle.concat(".pdf");
+		    link.download = "topic-internship-" + topicId + ".pdf";
 		    link.click();
 		    window.URL.revokeObjectURL(data);
 		    link.remove();

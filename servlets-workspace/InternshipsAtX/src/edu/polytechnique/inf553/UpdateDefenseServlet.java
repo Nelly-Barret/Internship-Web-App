@@ -38,7 +38,7 @@ public class UpdateDefenseServlet extends HttpServlet {
         if (session != null && session.getAttribute("user") != null) {
             Person user = (Person) session.getAttribute("user");
             String role = user.getRole();
-            if (role.equals("Admin")) {
+            if (role.equals("Admin") || role.equals("Professor") || role.equals("Assistant")) {
                 int defenseId = Integer.parseInt(request.getParameter("defenseId"));
                 LocalTime defenseTime = null;
                 LocalDate defenseDate = null;

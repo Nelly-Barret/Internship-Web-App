@@ -29,7 +29,7 @@ public class DownloadSlidesServlet extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
 
-            String query = "SELECT slides, title " +
+            String query = "SELECT slides, id " +
                     "FROM internship " +
                     "WHERE internship.id = ? AND slides IS NOT NULL;";
             try (PreparedStatement ps = con.prepareStatement(query)) {
@@ -53,7 +53,7 @@ public class DownloadSlidesServlet extends HttpServlet {
                         outputStream.close();
 
                         request.setAttribute("internshipId", internshipId);
-                        request.setAttribute("topicTitle", rs.getString("title"));
+                        request.setAttribute("topicId", rs.getInt("id"));
                         request.setAttribute("encodedContent", encodedContent);
                     }
                 }

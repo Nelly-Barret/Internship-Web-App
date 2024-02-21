@@ -41,7 +41,7 @@ public class DownloadReportServlet extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
 
-            String query = "SELECT report, title " +
+            String query = "SELECT report, id " +
                     "FROM internship " +
                     "WHERE internship.id = ? AND report IS NOT NULL;";
             try (PreparedStatement ps = con.prepareStatement(query)) {
@@ -65,7 +65,7 @@ public class DownloadReportServlet extends HttpServlet {
                         outputStream.close();
 
                         request.setAttribute("internshipId", internshipId);
-                        request.setAttribute("topicTitle", rs.getString("title"));
+                        request.setAttribute("topicId", rs.getInt("id"));
                         request.setAttribute("encodedContent", encodedContent);
                     }
                 }
